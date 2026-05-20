@@ -2,32 +2,58 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <windows.h>   // <-- IMPORTANTE (Windows UTF-8)
 #include "game.h"
+#include "colors.h"
 
-//main p iniciar jogo
+// main p iniciar jogo
 int main(void)
 {
+    // FORÇAR UTF-8 NO TERMINAL (EVITA LIXO COMO Ôûê)
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
+
     int debug_seed = 0;
 
-    // modo debug (fixo para testes)
     printf("Modo debug? (1 = sim / 0 = nao): ");
     scanf("%d", &debug_seed);
     getchar();
 
     if (debug_seed == 1)
     {
-        srand(1); //seed fixa p detetar bugs
+        srand(1);
     }
     else
     {
-        srand(time(NULL)); //aleatório normal
+        srand(time(NULL));
     }
 
     int option;
 
-    printf("\n* * * * * * * * * * * * *\n");
-    printf("   MINESWEEPER BY VIC\n");
-    printf("* * * * * * * * * * * * *\n");
+    printf("\n");
+
+    // ===== ASCII ART (SAFE UTF-8) =====
+    printf(YELLOW);
+    printf("██╗   ██╗██╗ ██████╗\n");
+    printf("██║   ██║██║██╔════╝\n");
+    printf("██║   ██║██║██║     \n");
+    printf("╚██╗ ██╔╝██║██║     \n");
+    printf(" ╚████╔╝ ██║╚██████╗\n");
+    printf("  ╚═══╝  ╚═╝ ╚═════╝\n");
+
+    printf(RED);
+    printf("███████╗██╗    ██╗███████╗███████╗██████╗ ███████╗██████╗ \n");
+    printf("██╔════╝██║    ██║██╔════╝██╔════╝██╔══██╗██╔════╝██╔══██╗\n");
+    printf("███████╗██║ █╗ ██║█████╗  █████╗  ██████╔╝█████╗  ██████╔╝\n");
+    printf("╚════██║██║███╗██║██╔══╝  ██╔══╝  ██╔═══╝ ██╔══╝  ██╔══██╗\n");
+    printf("███████║╚███╔███╔╝███████╗███████╗██║     ███████╗██║  ██║\n");
+    printf("╚══════╝ ╚══╝╚══╝ ╚══════╝╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝\n");
+
+    printf(RESET);
+
+    printf("\n");
+    printf(CYAN "=========== MINESWEEPER BY VIC ===========\n" RESET);
+    printf("\n");
 
     printf("1 - Jogar\n");
     printf("2 - Sair\n");
@@ -51,18 +77,14 @@ int main(void)
     char player[50];
 
     printf("Nome do jogador: ");
-
     fgets(player, sizeof(player), stdin);
 
-    //remover newline do nome
     player[strcspn(player, "\n")] = '\0';
 
     int score = 0;
-
     int result;
 
     result = play_level(10, 3, 1, &score);
-
     if (result != 1)
     {
         printf("\nJogo terminado no nivel 1.\n");
@@ -70,7 +92,6 @@ int main(void)
     }
 
     result = play_level(5, 2, 2, &score);
-
     if (result != 1)
     {
         printf("\nJogo terminado no nivel 2.\n");
@@ -78,7 +99,6 @@ int main(void)
     }
 
     result = play_level(3, 1, 3, &score);
-
     if (result != 1)
     {
         printf("\nJogo terminado no nivel 3.\n");
